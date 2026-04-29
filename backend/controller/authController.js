@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../schemas/User');
 
 
-const registerController = async (req, res)=>{
+const registerUser = async (req, res)=>{
   try {
     const {name, email, city, password, role, agreedToTerms} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,7 +37,7 @@ const registerController = async (req, res)=>{
   }
 }
 
-const loginController = async (req, res)=>{
+const loginUser = async (req, res)=>{
   try {
     const {email, password} = req.body;
 
@@ -90,4 +90,46 @@ const loginController = async (req, res)=>{
   }
 }
 
-module.exports = {registerController, loginController};
+const updatePassword = async (req, res)=>{
+  try {
+    const userId = req.params.id;
+    const { oldPassword, newPassword } = req.body;
+
+    const user = await User.findOne({_id: userId});
+    if(!user){
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    const matchPassword = await bcrypt.compare(oldPassword, user.password);
+    if(!matchPassword){
+      return res.status(401).json({
+        success: false,
+        message: "Wrong Password"
+      })
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    
+    await User.updateOne({_id: userId},
+      {$set:{
+        password: hashedNewPassword
+      }}
+    )
+
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Updating password failed",
+      error: error.message
+    })
+  }
+}
+
+module.exports = {registerUser, loginUser, updatePassword};
