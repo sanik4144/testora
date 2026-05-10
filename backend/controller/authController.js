@@ -132,4 +132,5 @@ const updatePassword = async (req, res)=>{
   }
 }
 
+
 module.exports = {registerUser, loginUser, updatePassword};
