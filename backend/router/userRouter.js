@@ -3,6 +3,9 @@ const router = express.Router();
 
 const { getAllUsers, getOneUser, updateOneUser, deleteOneUser } = require('../controller/userController');
 const { updatePassword } = require('../controller/authController');
+const { authenticate } = require('../middlewares/authMiddleware');
+
+router.use(authenticate);
 
 router.get('/all', getAllUsers);
 router.get('/:id', getOneUser);

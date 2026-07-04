@@ -4,11 +4,14 @@ import {React, useState} from 'react'
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import api from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { saveAuthSession } from "@/lib/auth";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const [form, setForm] = useState({
     email: "",
@@ -31,7 +34,9 @@ const Login = () => {
 
     try {
       const res = await api.post("/auth/login", form);
+      saveAuthSession(res.data);
       setSuccess(true);
+      // router.push("/");
     } catch (error) {
       setError(error.response?.data?.message || "Login Failed");
     } finally {
