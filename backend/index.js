@@ -7,8 +7,6 @@ const cors = require('cors')
 const authRouter = require('./router/authRouter');
 const userRouter = require('./router/userRouter');
 
-con();
-
 app.use(cors({
     origin: "*",
 }));
@@ -21,6 +19,8 @@ app.use('/check', (req, res)=>{
   res.send("Healthy");
 })
 
-app.listen(process.env.PORT, (req, res)=>{
-  console.log(`Running on port ${process.env.PORT}`);
-})
+con().then(() => {
+  app.listen(process.env.PORT, (req, res)=>{
+    console.log(`Running on port ${process.env.PORT}`);
+  })
+});

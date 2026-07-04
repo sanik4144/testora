@@ -1,0 +1,12 @@
+{
+  "name": "testora",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend_next run dev",
+    "start": "npm --prefix backend start",
+    "build": "npm --prefix frontend_next run build"
+  }
+}
