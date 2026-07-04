@@ -7,6 +7,8 @@ const cors = require('cors')
 const authRouter = require('./router/authRouter');
 const userRouter = require('./router/userRouter');
 
+con();
+
 app.use(cors({
     origin: "*",
 }));
